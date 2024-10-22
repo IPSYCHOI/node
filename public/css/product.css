@@ -8,7 +8,10 @@
     width: 20rem;
     max-width: 95%;
 }
-
+.center{
+    align-items: center;
+    text-align: center;
+  }
 .product__title {
     font-size: 1.2rem;
     text-align: center;

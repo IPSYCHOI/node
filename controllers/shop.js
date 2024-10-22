@@ -9,7 +9,9 @@ const getProducts=(req,res,next)=>{
 }
 const getOneProduct=(req,res,next)=>{
     const prodId=req.params.productId
-    
+    Product.findById(prodId,(p)=>{
+        res.render("shop/product_detail",{product:p,title:p.title,path:"/product"})
+    })
 }
 const getIndex=(req,res,next)=>{
     

@@ -22,7 +22,7 @@ module.exports=class product{
         this.des=des
         this.imageUrl=imageUrl
     }
-
+    findById(){}
     save(){
         this.id=Math.random().toString()
         getProductFromFile((products)=>{

@@ -1,0 +1,19 @@
+<%-include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/shop.css">
+</head>
+
+    <%-include('../includes/nav.ejs') %>
+    <main class="center">
+        <h1>
+            <%= product.title%>
+        </h1>
+        <hr>
+        <div>
+            <img src="<%= product.imageUrl%>" alt="<%=product.title %>">
+        </div>
+        <h2><%= product.price%></h2>
+        <p>
+            <%= product.des%>
+        </p>
+    </main>
+<%-include('../includes/end.ejs') %>

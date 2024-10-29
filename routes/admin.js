@@ -8,8 +8,12 @@ const router = express.Router();
 
 router.get("/add-product",adminController.getAddProduct)
 
+router.get("/edit_product/:productId",adminController.getEditProduct)
+
 router.get("/products",adminController.getProducts)
 
 router.post('/add-product',adminController.postAddProduct)
+
+router.post('/edit_product',adminController.postEditProduct)
 
 exports.routes=router

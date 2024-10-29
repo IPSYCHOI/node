@@ -1,4 +1,5 @@
 const Product=require("../models/product")
+const Cart=require("../models/cart")
 
 
 const getProducts=(req,res,next)=>{
@@ -33,6 +34,14 @@ const getCart=(req,res,next)=>{
     
     
 }
+const postCart=(req,res,next)=>{
+    const prodId=req.body.productId
+    Product.findById(prodId,(product)=>{
+        Cart.addProduct(prodId,product.price)
+    })
+    res.render("shop/cart",{title:"Add To Cart",path:"/cart",prodId:prodId})
+    
+}
 const getCheckout=(req,res,next)=>{
     
     res.render("shop/checkout",{title:"checkout",path:"/checkout"})
@@ -44,5 +53,6 @@ exports.getProducts=getProducts
 exports.getOneProduct=getOneProduct
 exports.getIndex=getIndex
 exports.getCart=getCart
+exports.postCart=postCart
 exports.getCheckout=getCheckout
 exports.getOrders=getOrders

@@ -16,7 +16,8 @@ module.exports=class product{
     price
     dis
     id
-    constructor(title,price,des,imageUrl){
+    constructor(id,title,price,des,imageUrl){
+        this.id=id
         this.title=title
         this.price=price
         this.des=des
@@ -29,12 +30,22 @@ module.exports=class product{
        })
     }
     save(){
-        this.id=Math.random().toString()
         getProductFromFile((products)=>{
+            if(this.id){
+                //const updatedProduct= products.find(p=>p.id === this.id)
+                const updatedProductIndex=products.findIndex(p=>p.id===this.id)
+                products[updatedProductIndex]=this
+                fs.writeFile(p,JSON.stringify(products),(err)=>{
+                    console.log(err)
+                })
+            }else{
+                this.id=Math.random().toString()
                 products.push(this)
                 fs.writeFile(p,JSON.stringify(products),(err)=>{
                 console.log(err)
             })
+            }
+                
         })
     
     }

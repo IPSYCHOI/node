@@ -29,17 +29,24 @@ const getOrders=(req,res,next)=>{
     
 }
 const getCart=(req,res,next)=>{
-    
-    res.render("shop/cart",{title:"cart",path:"/cart"})
-    
-    
+    Cart.fetchAllCart((commProds,data)=>{
+        if(commProds==null){
+            res.render("shop/cart",{prods:0,data:data,title:"cart",path:"/cart"})
+
+        }else{
+            res.render("shop/cart",{prods:commProds,data:data,title:"cart",path:"/cart"})
+
+        }        
+    })
 }
 const postCart=(req,res,next)=>{
     const prodId=req.body.productId
     Product.findById(prodId,(product)=>{
         Cart.addProduct(prodId,product.price)
+
     })
-    res.render("shop/cart",{title:"Add To Cart",path:"/cart",prodId:prodId})
+    res.redirect("/cart")
+
     
 }
 const getCheckout=(req,res,next)=>{

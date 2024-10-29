@@ -5,7 +5,11 @@ const { json } = require("body-parser")
 const p = path.join(rootDir,"data","cart.json")
 const getProductFromFile=(cb)=>{
     fs.readFile(p,(err,filecontent)=>{
-        cb(JSON.parse(filecontent))
+        if(filecontent.length > 0){
+            cb(JSON.parse(filecontent))
+        }else{
+            cb(null)
+        }
     })
 }
 module.exports=class cart{
@@ -13,8 +17,9 @@ module.exports=class cart{
         //fetch the previous cart
         let cart={"products":[],"totalPrice":0}
         fs.readFile(p,(err,fileContent)=>{
-            if(fileContent.length !==0){
+            if(fileContent.length > 0){
                 cart=JSON.parse(fileContent)
+                
             }
             let products=cart.products
             let existProduct=products.find(product=>product.id === +id)
@@ -52,5 +57,35 @@ module.exports=class cart{
             })
             console.log(products)
         })
+    }
+    static fetchAllCart(cb){
+        const Product=require("../models/product")
+        getProductFromFile((data)=>{
+            if(data==null){
+                cb(null,null)
+            }else{
+                const cartProducts=data.products
+                const ids=[]
+                const commonProds =[]
+                Product.fetchAll((products)=>{
+                    for(let p of cartProducts){
+                        
+                        ids.push(p.id)
+                    } 
+                    for(let id of ids){
+                        const product =products.find(product=>product.id === id.toString())
+                        if(product){
+                            const cartproduct=cartProducts.find(pro=>pro.id === id)
+                            const prodqty=cartproduct.qty
+                            const updatedProduct={...product,qty:prodqty}
+                            commonProds.push(updatedProduct)
+                        }
+                    }
+                    cb(commonProds,data)
+                })
+                }
+            
+        })
+        
     }
 }

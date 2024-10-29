@@ -41,9 +41,15 @@ const getProducts =(req,res, next)=>{
         res.render("admin/products",{prods:products,title:"All Products",path:"/admin/products"})
     })
 }
+const postDeleteProduct=(req,res,next)=>{
+    const prodId =req.body.prodId
+    Product.delete(prodId)
+    res.redirect("/admin/products")
+}
 
 exports.getAddProduct=getAddProduct
 exports.postAddProduct=postAddProduct
 exports.postEditProduct=postEditProduct
 exports.getProducts=getProducts
 exports.getEditProduct=getEditProduct
+exports.postDeleteProduct=postDeleteProduct

@@ -2,6 +2,7 @@ const path = require("path")
 const fs = require("fs")
 const rootDir = require("../util/path")
 const p = path.join(rootDir,"data","products.json")
+const Cart = require("../models/cart")
 const getProductFromFile=(cb)=>{
     fs.readFile(p,(err,fileContent)=>{
         if(err|| fileContent.length===0){
@@ -48,6 +49,17 @@ module.exports=class product{
                 
         })
     
+    }
+    static delete(id){
+        getProductFromFile((products)=>{
+            const deletedProductIndesx=products.findIndex(p=>p.id===id)
+            const deletedProduct=products.find(p=>p.id===id)
+            products.splice(deletedProductIndesx,1)
+            Cart.delete(id,deletedProduct.price)
+            fs.writeFile(p,JSON.stringify(products),(err)=>{
+                console.log(err)
+            })
+        })
     }
 
     static fetchAll(cb){

@@ -23,8 +23,10 @@
                         </div>
                         <div class="card__actions">
                             <a href="/admin/edit_product/<%=product.id%>/?edit=true" class="btn">edit</a>
-                            <%-include("../includes/add-to-cart",{product:product})%>
-                            
+                            <form action="/admin/delete-product" method="POST">
+                                <button type="submit" class="btn">Delete</button>
+                                <input type="hidden" name="prodId" value="<%=product.id%>" >
+                            </form>
                         </div>
                     </article>
                 <%}%>

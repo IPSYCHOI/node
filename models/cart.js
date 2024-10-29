@@ -3,6 +3,11 @@ const fs = require("fs")
 const rootDir = require("../util/path")
 const { json } = require("body-parser")
 const p = path.join(rootDir,"data","cart.json")
+const getProductFromFile=(cb)=>{
+    fs.readFile(p,(err,filecontent)=>{
+        cb(JSON.parse(filecontent))
+    })
+}
 module.exports=class cart{
     static addProduct(id,price){
         //fetch the previous cart
@@ -30,6 +35,22 @@ module.exports=class cart{
                 cart={...cart,"totalPrice":totalPrice}
                 fs.writeFile(p,JSON.stringify(cart),(err)=>{console.log(err)})
             }
+        })
+    }
+    static delete(id,price){
+        getProductFromFile((data)=>{
+            const products = data.products
+            const deletedProduct=products.find(p=>p.id=== +id)
+            const deletedProductIndex=products.findIndex(p=>p.id=== +id)
+            const qty = deletedProduct.qty
+            const totalPrice=data.totalPrice
+            const updatedPrice=totalPrice-(qty* +price)
+            products.splice(deletedProductIndex,1)
+            data={...data,"products":products,"totalPrice":updatedPrice}
+            fs.writeFile(p,JSON.stringify(data),(err)=>{
+                console.log(err)
+            })
+            console.log(products)
         })
     }
 }

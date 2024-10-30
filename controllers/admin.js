@@ -28,7 +28,7 @@ const postDeleteItme=(req,res,next)=>{
             res.redirect("/cart?err=Invalid quantity. Please enter a valid number.")
 
         }else if (calc == 0){
-            cart.delete(prodId,prodPrice)
+            cart.delete(prodId,prodPrice,qty)
             res.redirect("/cart")
         }
         else{
@@ -72,7 +72,8 @@ const getProducts =(req,res, next)=>{
 }
 const postDeleteProduct=(req,res,next)=>{
     const prodId =req.body.prodId
-    Product.delete(prodId)
+    const pp = req.query.pp
+    Product.delete(prodId,pp)
     res.redirect("/admin/products")
 }
 

@@ -50,12 +50,13 @@ module.exports=class product{
         })
     
     }
-    static delete(id){
+    static delete(id,pp){
         getProductFromFile((products)=>{
+            const qty=1
             const deletedProductIndesx=products.findIndex(p=>p.id===id)
             const deletedProduct=products.find(p=>p.id===id)
             products.splice(deletedProductIndesx,1)
-            Cart.delete(id,deletedProduct.price)
+            Cart.delete(id,deletedProduct.price,qty,pp)
             fs.writeFile(p,JSON.stringify(products),(err)=>{
                 console.log(err)
             })

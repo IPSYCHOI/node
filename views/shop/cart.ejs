@@ -35,9 +35,9 @@
                                     <%if(product.qty>1){%>
                                         <br>
                                         <h4>Number of Quantity you want to delete</h4>
-                                        
+                                        <h5 style="color: red;" id="1"></h5>
                                         <input required type="number" name="qty">
-                                            <%if(typeof error !== 'undefined'){%><script>alert("<%=error%>")</script><%}%>
+                                            <%if(typeof error !== 'undefined'){%><script>document.getElementById("1").innerHTML="<%=error%>"</script><%}%>
                                         <%}%>
                                 </form>
                             </div>

@@ -1,3 +1,4 @@
+const cart = require("../models/cart")
 const Product=require("../models/product")
 
 const getAddProduct=(req,res,next)=>{
@@ -15,6 +16,34 @@ const getEditProduct=(req,res,next)=>{
         }
     })
   
+}
+const postDeleteItme=(req,res,next)=>{
+    const prodId=req.body.prodId
+    const qty=req.body.qty
+    const prodPrice=req.body.prodPrice
+    const totalqty=req.body.totalqty
+    const calc = +totalqty- +qty
+    if(qty>0){
+        if(calc < 0){
+            res.redirect("/cart?err=Invalid quantity. Please enter a valid number.")
+
+        }else if (calc == 0){
+            cart.delete(prodId,prodPrice)
+            res.redirect("/cart")
+        }
+        else{
+            cart.delete(prodId,prodPrice,qty)
+            res.redirect("/cart")
+
+        }
+   
+    }else if(qty<0){
+        res.redirect("/cart?err=Invalid quantity. Please enter a positive number.")
+
+    }else if (qty == undefined){
+        cart.delete(prodId,prodPrice)
+        res.redirect("/cart")
+    }
 }
 
 const postAddProduct =(req,res, next)=>{
@@ -53,3 +82,4 @@ exports.postEditProduct=postEditProduct
 exports.getProducts=getProducts
 exports.getEditProduct=getEditProduct
 exports.postDeleteProduct=postDeleteProduct
+exports.postDeleteItme=postDeleteItme

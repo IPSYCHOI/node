@@ -29,12 +29,18 @@ const getOrders=(req,res,next)=>{
     
 }
 const getCart=(req,res,next)=>{
+    const err=req.query.err
     Cart.fetchAllCart((commProds,data)=>{
         if(commProds==null){
             res.render("shop/cart",{prods:0,data:data,title:"cart",path:"/cart"})
-
         }else{
-            res.render("shop/cart",{prods:commProds,data:data,title:"cart",path:"/cart"})
+            if(err){
+                res.render("shop/cart",{prods:commProds,error:err,data:data,title:"cart",path:"/cart"})
+
+            }else{
+                res.render("shop/cart",{prods:commProds,data:data,title:"cart",path:"/cart"})
+
+            }
 
         }        
     })
@@ -45,7 +51,7 @@ const postCart=(req,res,next)=>{
         Cart.addProduct(prodId,product.price)
 
     })
-    res.redirect("/cart")
+    res.redirect("/")
 
     
 }

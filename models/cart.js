@@ -42,20 +42,41 @@ module.exports=class cart{
             }
         })
     }
-    static delete(id,price){
+    static delete(id,price,qty=1){
         getProductFromFile((data)=>{
             const products = data.products
-            const deletedProduct=products.find(p=>p.id=== +id)
-            const deletedProductIndex=products.findIndex(p=>p.id=== +id)
-            const qty = deletedProduct.qty
             const totalPrice=data.totalPrice
-            const updatedPrice=totalPrice-(qty* +price)
-            products.splice(deletedProductIndex,1)
-            data={...data,"products":products,"totalPrice":updatedPrice}
-            fs.writeFile(p,JSON.stringify(data),(err)=>{
-                console.log(err)
-            })
-            console.log(products)
+            const deletedProductIndex=products.findIndex(p=>p.id=== +id)
+            const deletedProduct=products.find(p=>p.id === +id)
+            if(!deletedProduct){
+                return
+            }
+            if(+qty!=1){
+                const updatedPrice=totalPrice-(qty* +price)
+                deletedProduct.qty=deletedProduct.qty-qty
+                products[deletedProductIndex]=deletedProduct
+                data={...data,"products":products,"totalPrice":updatedPrice}
+                fs.writeFile(p,JSON.stringify(data),(err)=>{
+                    console.log(err)
+                })
+            }else if(+qty==1&& +deletedProduct.qty!=1){
+                const updatedPrice= +(totalPrice-(deletedProduct.qty* +price))
+                deletedProduct.qty=deletedProduct.qty-qty
+                products[deletedProductIndex]=deletedProduct
+                data={...data,"products":products,"totalPrice":updatedPrice}
+                fs.writeFile(p,JSON.stringify(data),(err)=>{
+                    console.log(err)
+                })
+
+            }else{
+                const updatedPrice=totalPrice-(qty* +price)
+                products.splice(deletedProductIndex,1)
+                data={...data,"products":products,"totalPrice":updatedPrice}
+                fs.writeFile(p,JSON.stringify(data),(err)=>{
+                    console.log(err)
+                })
+
+            }
         })
     }
     static fetchAllCart(cb){

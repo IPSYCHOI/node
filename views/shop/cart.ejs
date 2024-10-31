@@ -4,36 +4,54 @@
     
     <%-include('../includes/nav.ejs') %>
     <main>
-        <h1>Total Price = <%=data.totalPrice%></h1>
-        <hr>
-        <% if (prods.length > 0) {%>
-            <div class="grid">
-                <% for(let product of prods) { %>
-                    <article class="card product-item">
-                        <header class="card__header">
-                            <h1 class="product__title"><%= product.title %></h1>
-                        </header>
-                        <div class="card__image">
-                            <img src="<%= product.imageUrl %>" alt="<%= product.title %>">
-                        </div>
-                        <div class="card__content">
-                            <h2 class="product__price">$<%= product.price %></h2>
-                        </div>
-                        <div class="card__content">
-                            <h2 class="product__price">Quantity = <%= product.qty %></h2>
-                        </div>
-                        <div class="card__content">
-                            <p class="product__description"><%= product.des %></p>
-                        </div>
-                        <div class="card__actions">
-                            <a class="btn" href="">Remove From Cart </a>
-                        </div>
-                    </article>
-                <%}%>
-            </div>
-        <% }else{%>
+        <%if(data !== null){%>
+            <h1>Total Price = <%=data.totalPrice%></h1>
+            <hr>
+            <% if (prods.length > 0) {%>
+                <div class="grid">
+                    <% for(let product of prods) { %>
+                        <article class="card product-item">
+                            <header class="card__header">
+                                <h1 class="product__title"><%= product.title %></h1>
+                            </header>
+                            <div class="card__image">
+                                <img src="<%= product.imageUrl %>" alt="<%= product.title %>">
+                            </div>
+                            <div class="card__content">
+                                <h2 class="product__price">$<%= product.price %></h2>
+                            </div>
+                            <div class="card__content">
+                                <h2 class="product__price">Quantity = <%= product.qty %></h2>
+                            </div>
+                            <div class="card__content">
+                                <p class="product__description"><%= product.des %></p>
+                            </div>
+                            <div class="card__actions">
+                                <form method="POST" action="admin/delete-item">
+                                    <button type="submit" class="btn">Remove From cart</button>
+                                    <input value="<%=product.id%>" type="hidden" name="prodId">
+                                    <input value="<%=product.price%>" type="hidden" name="prodPrice">
+                                    <input value="<%= product.qty %>" type="hidden" name="totalqty">
+                                    <%if(product.qty>1){%>
+                                        <br>
+                                        <h4>Number of Quantity you want to delete</h4>
+                                        <h5 style="color: red;" id="1"></h5>
+                                        <input required type="number" name="qty">
+                                            <%if(typeof error !== 'undefined'){%><script>document.getElementById("1").innerHTML="<%=error%>"</script><%}%>
+                                        <%}%>
+                                </form>
+                            </div>
+                        </article>
+                    <%}%>
+                </div>
+            <% }else{%>
+                <h1>My Products</h1>
+                <p>List of all the products...</p>
+            <%}%>
+        <%}else{%>       
             <h1>My Products</h1>
             <p>List of all the products...</p>
         <%}%>
+
     </main>
 <%-include('../includes/end.ejs') %>

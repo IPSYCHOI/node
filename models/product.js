@@ -1,68 +1,32 @@
-const path = require("path")
-const fs = require("fs")
-const rootDir = require("../util/path")
-const p = path.join(rootDir,"data","products.json")
-const Cart = require("../models/cart")
-const getProductFromFile=(cb)=>{
-    fs.readFile(p,(err,fileContent)=>{
-        if(err|| fileContent.length===0){
-            return cb([])
-        }
-        cb(JSON.parse(fileContent))
+/**
+ *@type {import('sequelize').Model}
+ */
+const Sequelize = require("sequelize");
 
- })
-}
-module.exports=class product{
-    title
-    price
-    dis
-    id
-    constructor(id,title,price,des,imageUrl){
-        this.id=id
-        this.title=title
-        this.price=price
-        this.des=des
-        this.imageUrl=imageUrl
-    }
-    static findById(id,cb){
-       getProductFromFile(products=>{
-        const product = products.find(p=>p.id === id)
-        cb(product)
-       })
-    }
-    save(){
-        getProductFromFile((products)=>{
-            if(this.id){
-                //const updatedProduct= products.find(p=>p.id === this.id)
-                const updatedProductIndex=products.findIndex(p=>p.id===this.id)
-                products[updatedProductIndex]=this
-                fs.writeFile(p,JSON.stringify(products),(err)=>{
-                    console.log(err)
-                })
-            }else{
-                this.id=Math.random().toString()
-                products.push(this)
-                fs.writeFile(p,JSON.stringify(products),(err)=>{
-                console.log(err)
-            })
-            }
-                
-        })
-    
-    }
-    static delete(id){
-        getProductFromFile((products)=>{
-            const deletedProductIndesx=products.findIndex(p=>p.id===id)
-            const deletedProduct=products.find(p=>p.id===id)
-            products.splice(deletedProductIndesx,1)
-            Cart.delete(id,deletedProduct.price)
-            fs.writeFile(p,JSON.stringify(products),(err)=>{
-                console.log(err)
-            })
-        })
-    }
+const sequelize = require("../util/database");
 
-    static fetchAll(cb){
-     getProductFromFile(cb)  
-    }
-}
+const Product = sequelize.define("product", {
+	id: {
+		type: Sequelize.INTEGER,
+		autoIncrement: true,
+		allowNull: false,
+		primaryKey: true,
+	},
+	title: {
+		allowNull: false,
+		type: Sequelize.STRING,
+	},
+	price: {
+		type: Sequelize.DOUBLE,
+		allowNull: false,
+	},
+	imageUrl: {
+		type: Sequelize.STRING,
+		allowNull: false,
+	},
+	description: {
+		type: Sequelize.STRING,
+		allowNull: false,
+	},
+});
+module.exports = Product;

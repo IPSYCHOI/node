@@ -18,4 +18,6 @@ router.post('/edit_product',adminController.postEditProduct)
 
 router.post('/delete-product',adminController.postDeleteProduct)
 
+router.post('/delete-item',adminController.postDeleteItme)
+
 exports.routes=router

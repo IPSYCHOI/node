@@ -1,37 +1,44 @@
-const express =require("express")
+const express = require("express");
 
-const bodyparser= require("body-parser")
+const bodyparser = require("body-parser");
 
-const path = require("path")
+const path = require("path");
 
-const adminData=require("./routes/admin")
+const adminData = require("./routes/admin");
 
-const shopRouters=require("./routes/shop")
+const shopRouters = require("./routes/shop");
 
-const errorController = require("./controllers/error")
+const errorController = require("./controllers/error");
 
-const app = express()
+const sequelize = require("./util/database");
 
-app.set("view engine", "ejs")
+const app = express();
 
-app.set("views", "views")
+app.set("view engine", "ejs");
 
-app.use(bodyparser.urlencoded({extended:true}))
+app.set("views", "views");
 
-app.get('/favicon.ico', (req, res) => res.status(204));
+app.use(bodyparser.urlencoded({ extended: true }));
 
-app.use(express.static(path.join(__dirname,'public')))
+app.get("/favicon.ico", (req, res) => res.status(204));
 
-app.use("/admin",adminData.routes)
+app.use(express.static(path.join(__dirname, "public")));
 
-app.use(shopRouters)
+app.use("/admin", adminData.routes);
 
-app.use(errorController.get404)
+app.use(shopRouters);
 
-const port = 80
-const host = 'sus'  
+app.use(errorController.get404);
 
-
-app.listen(port,host,()=>{
-    console.log(`Server running at http://${host}:${port}`)
-})
+const port = 80;
+const host = "sus";
+sequelize
+	.sync()
+	.then(() => {
+		app.listen(port, host, () => {
+			console.log(`Server running at http://${host}:${port}`);
+		});
+	})
+	.catch((err) => {
+		console.log(err);
+	});

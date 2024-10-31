@@ -42,23 +42,54 @@ module.exports=class cart{
             }
         })
     }
-    static delete(id,price){
-        getProductFromFile((data)=>{
-            const products = data.products
-            const deletedProduct=products.find(p=>p.id=== +id)
-            const deletedProductIndex=products.findIndex(p=>p.id=== +id)
-            const qty = deletedProduct.qty
-            const totalPrice=data.totalPrice
-            const updatedPrice=totalPrice-(qty* +price)
-            products.splice(deletedProductIndex,1)
-            data={...data,"products":products,"totalPrice":updatedPrice}
-            fs.writeFile(p,JSON.stringify(data),(err)=>{
-                console.log(err)
-            })
-            console.log(products)
-        })
+    static delete(id, price, qty = 1,pp=false) {
+        getProductFromFile((data) => {
+            const products = data.products;
+            const totalPrice = data.totalPrice;
+            const deletedProductIndex = products.findIndex((p) => p.id === +id);
+            const deletedProduct = products[deletedProductIndex];
+    
+            // Check if product to delete exists
+            if (!deletedProduct) {
+                console.log("Product not found.");
+                return;
+            }
+    
+            let updatedPrice;
+            if (+qty !== 1) {
+                updatedPrice = totalPrice - qty * +price;
+                deletedProduct.qty -= qty;
+                if(+deletedProduct.qty==0){
+                    products.splice(deletedProductIndex, 1); // Remove product from array
+                }else{
+                    products[deletedProductIndex] = deletedProduct;
+                }
+            } else if (+qty === 1 && +deletedProduct.qty !== 1) {
+                if (pp=="true"){
+                    updatedPrice = totalPrice - deletedProduct.qty * +price;
+                    products.splice(deletedProductIndex, 1);
+                } else {
+                    updatedPrice = totalPrice - qty * +price;
+                    deletedProduct.qty -= qty;
+                    products[deletedProductIndex] = deletedProduct;
+                }   
+                
+                
+            } else {
+                updatedPrice = totalPrice - qty * +price;
+                products.splice(deletedProductIndex, 1); // Remove product from array
+            }
+    
+            data = { ...data, products, totalPrice: updatedPrice };
+    
+            fs.writeFile(p, JSON.stringify(data), (err) => {
+                if (err) {
+                    console.error("Error writing file:", err);
+                } 
+            });
+        });
     }
-    static fetchAllCart(cb){
+        static fetchAllCart(cb){
         const Product=require("../models/product")
         getProductFromFile((data)=>{
             if(data==null){
@@ -83,7 +114,7 @@ module.exports=class cart{
                     }
                     cb(commonProds,data)
                 })
-                }
+            }
             
         })
         

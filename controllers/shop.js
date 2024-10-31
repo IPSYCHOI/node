@@ -1,11 +1,13 @@
 const Product = require("../models/product");
+
 const Cart = require("../models/cart");
+const { where } = require("sequelize");
 
 const getProducts = (req, res, next) => {
-	Product.fetchAll()
-		.then((data) => {
+	Product.findAll()
+		.then((products) => {
 			res.render("shop/product_list", {
-				prods: data[0],
+				prods: products,
 				title: "shop",
 				path: "/index",
 			});
@@ -16,19 +18,19 @@ const getProducts = (req, res, next) => {
 };
 const getOneProduct = (req, res, next) => {
 	const prodId = req.params.productId;
-	Product.findById(prodId).then(([[product]]) => {
+	Product.findAll({ where: { id: prodId } }).then((product) => {
 		res.render("shop/product_detail", {
-			product: product,
-			title: product.title,
+			product: product[0],
+			title: product[0].title,
 			path: "/product",
 		});
 	});
 };
 const getIndex = (req, res, next) => {
-	Product.fetchAll()
-		.then((data) => {
+	Product.findAll()
+		.then((products) => {
 			res.render("shop/index", {
-				prods: data[0],
+				prods: products,
 				title: "shop",
 				path: "/index",
 			});

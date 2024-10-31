@@ -1,3 +1,4 @@
+const { where } = require("sequelize");
 const cart = require("../models/cart");
 const Product = require("../models/product");
 
@@ -11,18 +12,22 @@ const getAddProduct = (req, res, next) => {
 const getEditProduct = (req, res, next) => {
 	const edit = req.query.edit;
 	prodId = req.params.productId;
-	Product.findById(prodId, (product) => {
-		if (edit) {
-			res.render("admin/edit_product", {
-				title: "Edit product",
-				path: "/admin/edit-product",
-				e: edit,
-				product: product,
-			});
-		} else {
-			res.redirect("/");
-		}
-	});
+	Product.findByPk(prodId)
+		.then((product) => {
+			if (edit) {
+				res.render("admin/edit_product", {
+					title: "Edit product",
+					path: "/admin/edit-product",
+					e: edit,
+					product: product,
+				});
+			} else {
+				res.redirect("/");
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+		});
 };
 const postDeleteItme = (req, res, next) => {
 	const prodId = req.body.prodId;
@@ -57,9 +62,12 @@ const postAddProduct = (req, res, next) => {
 	const des = req.body.des;
 	const imageUrl = req.body.imageUrl;
 	const title = req.body.title;
-	const product = new Product(null, title, price, des, imageUrl);
-	product
-		.save()
+	Product.create({
+		title: title,
+		price: price,
+		imageUrl: imageUrl,
+		description: des,
+	})
 		.then(() => {
 			res.redirect("/");
 		})
@@ -73,18 +81,39 @@ const postEditProduct = (req, res, next) => {
 	const des = req.body.des;
 	const imageUrl = req.body.imageUrl;
 	const title = req.body.title;
-	const product = new Product(prodId, title, price, des, imageUrl);
-	product.save();
-	res.redirect("/");
+	Product.update(
+		{
+			title: title,
+			price: price,
+			description: des,
+			imageUrl: imageUrl,
+		},
+		{ where: { id: prodId } }
+	)
+		.then((products) => {
+			res.render("admin/products", {
+				prods: products,
+				title: "All Products",
+				path: "/admin/products",
+			});
+			res.redirect("/");
+		})
+		.catch((err) => {
+			console.log(err);
+		});
 };
 const getProducts = (req, res, next) => {
-	Product.fetchAll((products) => {
-		res.render("admin/products", {
-			prods: products,
-			title: "All Products",
-			path: "/admin/products",
+	Product.findAll()
+		.then((products) => {
+			res.render("admin/products", {
+				prods: products,
+				title: "All Products",
+				path: "/admin/products",
+			});
+		})
+		.catch((err) => {
+			console.log(err);
 		});
-	});
 };
 const postDeleteProduct = (req, res, next) => {
 	const prodId = req.body.prodId;

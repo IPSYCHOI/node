@@ -1,6 +1,33 @@
 <%-include('../includes/head.ejs') %>
     <link rel="stylesheet" href="/css/shop.css">
 </head>
+<%-include('../includes/nav.ejs') %>
 
-    <%-include('../includes/nav.ejs') %>
+<main>
+    <% if(orders.length > 0) { %>
+        <div>
+            <ul class="cart__item-list">
+                <% for(let order of orders) { %>
+                    <li class="cart__item">
+                        <h2><%= order.id %></h2>
+                            <% for(let product of order.products) { %>
+                                <main class="center">
+                                    <h3>Title: <%= product.title %></h3>
+                                    <h3>Quantity: <%= product.orderItem.quantity %></h3>
+                                
+                                </main>
+                                
+                            <% } %>
+                                
+                    </li>
+                <% } %>
+            </ul>
+        </div>
+        <hr>
+       
+    <% } else { %>
+        <h1>No Orders!</h1>
+    <% } %>
+</main>
+
 <%-include('../includes/end.ejs') %>

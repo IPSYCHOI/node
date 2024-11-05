@@ -50,7 +50,7 @@ app.use(shopRouters);
 app.use(errorController.get404);
 
 const port = 80;
-const host = "0.0.0.0";
+const host = "sus";
 
 Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
 User.hasMany(Product);

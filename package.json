@@ -1,24 +1,24 @@
 {
-  "name": "first",
-  "version": "1.0.0",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
-  },
-  "author": "sus",
-  "license": "ISC",
-  "description": "",
-  "devDependencies": {
-    "nodemon": "^3.1.4"
-  },
-  "dependencies": {
-    "body-parser": "^1.20.2",
-    "ejs": "^3.1.10",
-    "express": "^4.19.2",
-    "express-handlebars": "^8.0.1",
-    "mysql2": "^3.11.3",
-    "pug": "^3.0.3",
-    "sequelize": "^6.37.5"
-  }
+	"name": "node",
+	"version": "1.0.0",
+	"main": "app.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "nodemon app.js"
+	},
+	"author": "sus",
+	"license": "ISC",
+	"description": "",
+	"devDependencies": {
+		"nodemon": "^3.1.4"
+	},
+	"dependencies": {
+		"body-parser": "^1.20.2",
+		"ejs": "^3.1.10",
+		"express": "^4.19.2",
+		"express-handlebars": "^8.0.1",
+		"mysql2": "^3.11.3",
+		"pug": "^3.0.3",
+		"sequelize": "^6.37.5"
+	}
 }

@@ -11,27 +11,24 @@
                 <% for(let product of prods) { %>
                     <article class="card product-item">
                         <header class="card__header">
-                            <h1 class="product__title"><%= product.title %></h1>
+                            <h1 class="product__title"><%= product.productId.title %></h1>
                         </header>
                         <div class="card__image">
-                            <img src="<%= product.imageUrl %>" alt="<%= product.title %>">
+                            <img src="<%= product.productId.imageUrl %>" alt="<%= product.productId.title %>">
                         </div>
                         <div class="card__content">
-                            <h2 class="product__price">$<%= product.price %></h2>
+                            <h2 class="product__price">$<%= product.productId.price %></h2>
                         </div>
                         <div class="card__content">
-                            <h2 class="product__price">Quantity = <%= product.cartItem.quantity %></h2>
+                            <h2 class="product__price">Quantity = <%= product.quantity %></h2>
                         </div>
                         <div class="card__content">
-                            <p class="product__description"><%= product.des %></p>
+                            <p class="product__description"><%= product.productId.description %></p>
                         </div>
                         <div class="card__actions">
-                            <form method="POST" action="admin/delete-item">
+                            <form method="POST" action="/delete-item">
                                 <button type="submit" class="btn">Remove From cart</button>
-                                <input value="<%=product.id%>" type="hidden" name="prodId">
-                                <input value="<%=product.price%>" type="hidden" name="prodPrice">
-                                <input value="<%= product.qty %>" type="hidden" name="totalqty">
-                                        
+                                <input value="<%=product.productId._id%>" type="hidden" name="prodId">
                             </form>
                             
                         </div>

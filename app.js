@@ -10,19 +10,9 @@ const shopRouters = require("./routes/shop");
 
 const errorController = require("./controllers/error");
 
-const Product = require("./models/product");
+const mongoose=require("mongoose")
 
-const User = require("./models/user");
-
-const Cart = require("./models/cart");
-
-const Order = require("./models/order");
-
-const OrderItem = require("./models/order-item");
-
-const CartItem = require("./models/cart-item");
-
-const sequelize = require("./util/database");
+const User =require("./models/user")
 
 const app = express();
 
@@ -37,10 +27,14 @@ app.get("/favicon.ico", (req, res) => res.status(204));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use((req, res, next) => {
-	User.findByPk(1).then((user) => {
-		req.user = user;
-		next();
-	});
+	User.findById("6753c81915451702af6d9fc4")
+	.then(user=>{
+		req.user=user
+		next()
+	})
+	.catch(err=>{
+		console.log(err)
+	})
 });
 
 app.use("/admin", adminData.routes);
@@ -52,44 +46,20 @@ app.use(errorController.get404);
 const port = 80;
 const host = "sus";
 
-Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
-User.hasMany(Product);
-User.hasOne(Cart);
-Cart.belongsToMany(Product, { through: CartItem });
-Product.belongsToMany(Cart, { through: CartItem });
-User.hasMany(Order);
-Order.hasOne(User);
-Order.belongsToMany(Product, { through: OrderItem });
-Product.belongsToMany(Order, { through: OrderItem });
 
-sequelize
-	// .sync({ force: true })
-	.sync()
-	.then(() => {
-		return User.findByPk(1);
-	})
-	.then((user) => {
-		if (!user) {
-			User.create({ name: "ahmed", email: "ahmed@a.com" });
-		}
-		return user;
-	})
-	.then((user) => {
-		// console.log(user);
-		user.getCart()
-			.then((cart) => {
-				if (!cart) {
-					return user.createCart().then(() => {});
-				}
-			})
-			.then(() => {
-				app.listen(port, host, () => {
-					console.log(
-						`Server running at http://${host}:${port}`
-					);
-				});
-			});
-	})
-	.catch((err) => {
-		console.log(err);
+
+mongoose.connect("mongodb+srv://psychofesko:rwO5WozO5tjva18W@cluster0.aevcl.mongodb.net/shop?retryWrites=true&w=majority&appName=Cluster0")
+.then(r=>{
+	
+	app.listen(port, host, () => {
+	
+		console.log(
+			`Server running at http://${host}:${port}`
+		);
+		
 	});
+
+})
+.catch(err=>{
+	console.log(err)
+})

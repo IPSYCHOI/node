@@ -9,11 +9,11 @@
             <ul class="cart__item-list">
                 <% for(let order of orders) { %>
                     <li class="cart__item">
-                        <h2><%= order.id %></h2>
-                            <% for(let product of order.products) { %>
+                        <h2><%= order._id %></h2>
+                            <% for(let p of order.products) { %>
                                 <main class="center">
-                                    <h3>Title: <%= product.title %></h3>
-                                    <h3>Quantity: <%= product.orderItem.quantity %></h3>
+                                    <h3>Title: <%= p.product.title %></h3>
+                                    <h3>Quantity: <%= p.quantity %></h3>
                                 
                                 </main>
                                 
